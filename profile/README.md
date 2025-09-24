@@ -16,7 +16,7 @@ Each NFT includes custom artwork stored on **Walrus decentralized storage** and 
 ---
 
 ## Demo
-[![](https://img.youtube.com/vi/H0VpKQUAESw/maxresdefault.jpg)](https://www.youtube.com/watch?v=H0VpKQUAESw)
+[![](https://avatars.githubusercontent.com/u/233510346?s=200&v=4)](https://www.youtube.com/watch?v=H0VpKQUAESw)
 
 ---
 
