@@ -1,58 +1,110 @@
-Dino Go: Location-Based NFT Game on Sui Blockchain
+# 🦖 Dino Go: Location-Based NFT Game on Sui Blockchain
 
-Summary
+**Dino Go** is a Web/Mobile game where players explore real-world checkpoints, collect random letters, and mint them into **Sentence NFTs**.  
+Each NFT includes custom artwork stored on **Walrus decentralized storage** and is tradeable via the **Sui Kiosk marketplace**.
 
-Dino Go is a Web/Mobile game where players explore real-world checkpoints, collect random letters, and mint them into Sentence NFTs. Each NFT has custom artwork stored on Walrus decentralized storage and is tradeable via the Sui Kiosk marketplace.
+---
 
-Core Loop
+## Core Loop
 
-1. Explore – Players navigate a 3D map (Google Maps + Three.js). Seal validates GPS within ~50m, blocking spoofing.
-2. Collect – Sui's on-chain randomness fairly distributes letters (A–Z) with epoch-based claim limits.
-3. Create – In the NFT Studio, letters are atomically consumed in a Move transaction, minting a Sentence NFT with metadata and Walrus CID.
-4. Trade – Kiosk marketplace ensures escrow-secured trades, automatic royalties, and interoperability with other Sui markets.
-5. Progress – Stats, leaderboards, and seasonal events foster community growth.
+1. **Explore** – Players navigate a 3D map (Google Maps + Three.js).  
+   - Seal validates GPS within ~50m, blocking spoofing.
 
-Technical Implementation
+2. **Collect** – Sui's on-chain randomness fairly distributes letters (A–Z).  
+   - Epoch-based claim limits prevent abuse.
 
-Move Smart Contracts
+3. **Create** – In the NFT Studio, letters are atomically consumed in a Move transaction.  
+   - A new **Sentence NFT** is minted with metadata and Walrus CID.
 
-Three-Module Architecture: user.move, checkpoint.move, nft.move
+4. **Trade** – The Kiosk marketplace enables:  
+   - Escrow-secured trades  
+   - Automatic royalties  
+   - Interoperability with other Sui markets
 
-- Applied: User profiles store letter inventory as Sui Bag objects. Checkpoint claims use sui::random for fair distribution. NFT minting atomically consumes letters and embeds Walrus blob IDs.
-- Benefits: Object-centric design prevents double-spends; parallel execution handles thousands of concurrent players.
+5. **Progress** – Stats, leaderboards, and seasonal events foster community growth.
 
-Sui Blockchain Integration
+---
 
-SDK Stack: @mysten/dapp-kit, @mysten/sui.js, @mysten/enoki
+## Technical Implementation
 
-- Applied: Custom React hooks (useCheckpoints, useLetterInventory) wrap transaction building. zkLogin via Google OAuth eliminates seed phrase barriers.
-- Benefits: Type-safe transactions prevent costly errors; passwordless onboarding increases user adoption.
+### Move Smart Contracts
 
-Walrus Decentralized Storage
+**Three-Module Architecture:**  
+- `user.move`  
+- `checkpoint.move`  
+- `nft.move`  
 
-Direct HTTP API: Custom WalrusClient in src/web3/walrusClient.ts
+**Applied:**  
+- User profiles store letter inventory as **Sui Bag objects**  
+- Checkpoint claims use `sui::random` for fair distribution  
+- NFT minting atomically consumes letters and embeds Walrus blob IDs  
 
-- Applied: NFT artwork uploaded via chunked uploads, returns blob_id embedded in Move objects. Deduplication prevents storage waste.
-- Benefits: 10x cost reduction vs on-chain storage; cryptographic proofs ensure data integrity.
+**Benefits:**  
+- Object-centric design prevents double-spends  
+- Parallel execution supports thousands of concurrent players  
 
-Seal Threshold Encryption
+---
 
-Geofencing & Secrets: Custom SealClient in src/web3/sealClient.ts
+### Sui Blockchain Integration
 
-- Applied: Location proofs encrypted before checkpoint validation. Google Maps API keys secured via distributed threshold encryption.
-- Benefits: Prevents GPS spoofing attacks; no single point of failure for sensitive data.
+**SDK Stack:**  
+- `@mysten/dapp-kit`  
+- `@mysten/sui.js`  
+- `@mysten/enoki`  
 
-Kiosk Marketplace
+**Applied:**  
+- Custom React hooks (`useCheckpoints`, `useLetterInventory`) wrap transaction building  
+- zkLogin with Google OAuth removes seed phrase barriers  
 
-Standard Compliance: Custom KioskClient in src/web3/kioskClient.ts
+**Benefits:**  
+- Type-safe transactions prevent costly errors  
+- Passwordless onboarding boosts user adoption  
 
-- Applied: NFTs automatically compatible with external Sui marketplaces. Fee-splitting logic handles creator royalties via Move events.
-- Benefits: Zero additional integration for cross-platform trading; transparent royalty distribution.
+---
 
-Technical Strengths
+### Walrus Decentralized Storage
 
-- Atomic Operations: Move contracts prevent partial state updates during letter consumption and NFT minting
-- Cryptographic Fairness: Sui randomness API eliminates bias in letter distribution across all players
-- Decentralized Storage: Walrus integration reduces costs while maintaining permanent artwork availability
-- Security: Seal threshold encryption protects against location spoofing and key compromise
-- Interoperability: Kiosk standard ensures NFTs work across the entire Sui ecosystem
+**Implementation:**  
+- Custom `WalrusClient` in `src/web3/walrusClient.ts`  
+- Artwork uploaded via chunked uploads, returning a `blob_id`  
+
+**Benefits:**  
+- **10x cheaper** than on-chain storage  
+- Deduplication prevents storage waste  
+- Cryptographic proofs ensure integrity  
+
+---
+
+### Seal Threshold Encryption
+
+**Implementation:**  
+- Custom `SealClient` in `src/web3/sealClient.ts`  
+- Location proofs encrypted before checkpoint validation  
+- Google Maps API keys secured with distributed threshold encryption  
+
+**Benefits:**  
+- Prevents GPS spoofing  
+- No single point of failure for secrets  
+
+---
+
+### Kiosk Marketplace
+
+**Implementation:**  
+- Custom `KioskClient` in `src/web3/kioskClient.ts`  
+- NFTs automatically compatible with external Sui marketplaces  
+- Move events handle fee-splitting for royalties  
+
+**Benefits:**  
+- Zero additional integration needed for cross-market trading  
+- Transparent royalty distribution  
+
+---
+
+## Technical Strengths
+
+- **Atomic Operations** – Move contracts prevent partial state updates during minting  
+- **Cryptographic Fairness** – Sui randomness API eliminates distribution bias  
+- **Decentralized Storage** – Walrus reduces costs, ensures permanence  
+- **Security** – Seal encryption protects against spoofing & key compromise  
+- **Interoperability** – Kiosk standard ensures cross-ecosystem NFT trading  
